@@ -26,6 +26,7 @@ class PokemonListViewModel: PokemonListViewModelProtocol {
     weak var delegate: PokemonListViewModelDelegate?
     let networkAPI: Networkable
     private (set) var filteredModel = [PokemonListItem]()
+    private let searchDebouncer = Debouncer(delay: 0.5, handler: {})
     
     init(networkAPI: Networkable) {
         self.networkAPI = networkAPI
@@ -65,10 +66,15 @@ class PokemonListViewModel: PokemonListViewModelProtocol {
     func searchElements(searchText: String) {
         if searchText.isEmpty {
             filteredModel = model
+            delegate?.updateUI()
         } else {
-            filteredModel = model.filter( { $0.name.range(of: searchText, options: .caseInsensitive) != nil }  )
+            searchDebouncer.invalidate()
+            searchDebouncer.handler = {
+                self.filteredModel = self.model.filter( { $0.name.range(of: searchText, options: .caseInsensitive) != nil })
+                self.delegate?.updateUI()
+            }
+            searchDebouncer.call()
         }
-        delegate?.updateUI()
     }
 }
 
