@@ -9,17 +9,20 @@ import XCTest
 @testable import PokemonApp
 
 class MockNetworkLayer: Networkable {
-    func cancelTaskBy(id: Int) {
+    var id = 0
     
+    func cancelTaskBy(id: Int) {
+        self.id = id
     }
     
-    
     func getOfficialArtworkImage(id: Int, completion: @escaping (UIImage?) -> ()) {
-        
+        let image = UIImage()
+        image.accessibilityIdentifier = "officialImage"
+        completion(image)
     }
     
     func getPokemons(completion: @escaping ([PokemonListItem]) -> ()) {
-        completion([PokemonListItem(name: "testPokemon", url: "testUrl")])
+        completion([PokemonListItem(name: "testPokemon", url: "testUrl/12/")])
     }
     
     func getPokemon(name: String, completion: @escaping (Pokemon) -> ()) {
