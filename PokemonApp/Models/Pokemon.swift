@@ -19,6 +19,7 @@ struct Stat: Codable {
     var name: String
     var url: String
 }
+// swiftlint:disable identifier_name
 
 struct Stats: Codable {
     var base_stat: Int
@@ -38,18 +39,14 @@ struct Sprites: Codable {
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }()
-    
     var stringURLs: [String] {
         var urls = [String]()
-        
         if let frontDefault = front_default {
             urls.append(frontDefault)
         }
-        
         if let frontShiny = front_shiny {
             urls.append(frontShiny)
         }
-        
         if let backDefault = back_default {
             urls.append(backDefault)
         }
